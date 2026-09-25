@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colling Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0B0E;
+    --panel:#131620;
+    --cyan:#4CE0D2;
+    --magenta:#FF4FA3;
+    --amber:#FFB000;
+    --cream:#EDE6D6;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Space Mono',monospace;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(rgba(0,0,0,0) 0 2px, rgba(0,0,0,.18) 2px 4px);
+    z-index:50;
+    mix-blend-mode:multiply;
+  }
+  body::after{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+    z-index:49;
+  }
+
+  .pixel{font-family:'Press Start 2P',monospace;}
+
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px clamp(18px,5vw,56px);
+    border-bottom:2px solid rgba(76,224,210,.25);
+  }
+  .logo{font-size:.75rem; letter-spacing:.04em;}
+  .logo b{color:var(--amber);}
+  nav{display:flex; gap:6px;}
+  nav a{
+    color:rgba(237,230,214,.65); text-decoration:none; font-size:.72rem;
+    letter-spacing:.03em;
+    padding:9px 16px; border-radius:2px;
+    border:1px solid transparent;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  nav a:hover{color:var(--cyan); border-color:rgba(76,224,210,.4);}
+  nav a.active{color:var(--bg); background:var(--cyan); border-color:var(--cyan);}
+  @media(max-width:560px){ nav a{padding:8px 10px; font-size:.62rem;} }
+
+  .hero{
+    max-width:900px; margin:0 auto;
+    padding:clamp(60px,14vw,140px) clamp(18px,5vw,56px) clamp(50px,10vw,90px);
+    text-align:left;
+  }
+  .crt-tag{
+    font-size:.7rem; color:var(--magenta); margin:0 0 22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot{
+    width:9px; height:9px; background:var(--magenta); border-radius:50%;
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:.15;}}
+
+  .hero h1{
+    font-size:clamp(1.6rem,5.6vw,3.1rem);
+    line-height:1.5;
+    margin:0 0 30px;
+  }
+  .hero h1 span{color:var(--cyan);}
+  .hero p.type{
+    font-size:1rem; color:rgba(237,230,214,.75); max-width:56ch;
+    border-left:3px solid var(--amber); padding-left:16px; margin:0 0 40px;
+  }
+  .cursor{display:inline-block; width:.55em; height:1em; background:var(--cream); vertical-align:-2px; animation:blink 1s steps(1) infinite;}
+
+  section{max-width:1000px; margin:0 auto; padding:70px clamp(18px,5vw,56px);}
+  #projekty{border-top:2px solid rgba(76,224,210,.25);}
+  .screen-title{font-size:.85rem; color:var(--amber); margin:0 0 8px;}
+  .screen-sub{color:rgba(237,230,214,.55); font-size:.85rem; margin:0 0 44px;}
+
+  .cabinets{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+  @media(max-width:680px){.cabinets{grid-template-columns:1fr;}}
+
+  .cab{
+    text-decoration:none; color:var(--cream);
+    background:var(--panel);
+    border:2px solid rgba(237,230,214,.15);
+    border-radius:4px;
+    padding:26px;
+    position:relative;
+    display:flex; flex-direction:column; gap:18px;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .cab:hover{transform:translateY(-5px);}
+  .slot{font-size:.7rem; color:rgba(237,230,214,.45); letter-spacing:.05em;}
+  .cab h3{margin:0; font-size:1.05rem; line-height:1.4;}
+  .bar{height:10px; background:rgba(237,230,214,.08); border-radius:2px; overflow:hidden;}
+  .bar i{display:block; height:100%; width:30%; transition:width .4s ease;}
+  .cab:hover .bar i{width:100%;}
+  .run{font-size:.75rem; display:flex; align-items:center; gap:8px; margin-top:auto;}
+
+  .cab.a{border-color:rgba(255,176,0,.3);}
+  .cab.a .bar i{background:var(--amber);}
+  .cab.a .run{color:var(--amber);}
+  .cab.a:hover{border-color:var(--amber); box-shadow:0 0 24px rgba(255,176,0,.15);}
+
+  .cab.b{border-color:rgba(76,224,210,.3);}
+  .cab.b .bar i{background:var(--cyan);}
+  .cab.b .run{color:var(--cyan);}
+  .cab.b:hover{border-color:var(--cyan); box-shadow:0 0 24px rgba(76,224,210,.15);}
+
+  #o-nas{border-top:2px solid rgba(76,224,210,.25);}
+  #o-nas p.lead{max-width:62ch; color:rgba(237,230,214,.8); font-size:.95rem; margin:0 0 44px;}
+  .manifesto{display:flex; flex-direction:column; gap:0;}
+  .m-row{
+    display:flex; gap:24px; align-items:flex-start;
+    padding:20px 0; border-top:1px solid rgba(237,230,214,.1);
+  }
+  .m-row:last-child{border-bottom:1px solid rgba(237,230,214,.1);}
+  .m-key{font-size:.7rem; color:var(--magenta); flex:0 0 auto; padding-top:2px;}
+  .m-row p{margin:0; font-size:.92rem; color:rgba(237,230,214,.78); max-width:56ch;}
+
+  #kontakt{border-top:2px solid rgba(76,224,210,.25);}
+  .contact-box{
+    background:var(--panel); border:2px solid rgba(255,79,163,.3); border-radius:4px;
+    padding:32px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px;
+  }
+  .contact-box p{margin:0; max-width:44ch; font-size:.9rem; color:rgba(237,230,214,.75);}
+  .contact-box a.btn{
+    text-decoration:none; font-size:.75rem; color:var(--bg); background:var(--magenta);
+    padding:14px 22px; border-radius:2px; white-space:nowrap;
+    transition:filter .15s;
+  }
+  .contact-box a.btn:hover{filter:brightness(1.12);}
+
+  footer{
+    max-width:1000px; margin:0 auto;
+    padding:36px clamp(18px,5vw,56px) calc(44px + env(safe-area-inset-bottom,0px));
+    border-top:2px solid rgba(76,224,210,.25);
+    color:rgba(237,230,214,.4); font-size:.72rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo pixel"><b>C</b>OLLING STUDIO</div>
+  <nav>
+    <a href="#hero" class="active">STRONA GŁÓWNA</a>
+    <a href="#o-nas">O NAS</a>
+    <a href="#projekty">PROJEKTY</a>
+    <a href="#kontakt">KONTAKT</a>
+  </nav>
+</header>
+
+<div class="hero" id="hero">
+  <p class="crt-tag pixel"><span class="dot"></span>SYSTEM ONLINE</p>
+  <h1>Robimy gry, w które <span>wraca się</span> po jednym kliknięciu za dużo.</h1>
+  <p class="type">Colling Studio &gt; małe studio, duże ambicje klikania. Dwa tytuły w rotacji, zero zbędnego balastu.<span class="cursor"></span></p>
+</div>
+
+<section id="o-nas">
+  <p class="screen-title pixel">O NAS</p>
+  <p class="lead">Zaczęło się od nudy i za dużej ilości wolnego czasu. Zostało: dwa uzależnienia w fazie beta i przekonanie, że najlepsze pomysły przychodzą o 2 w nocy, kiedy nikt nie mówi "to się nie uda".</p>
+  <div class="manifesto">
+    <div class="m-row"><span class="m-key pixel">01</span><p>Nie liczymy godzin pracy — liczymy próby, zanim coś zadziała.</p></div>
+    <div class="m-row"><span class="m-key pixel">02</span><p>Jeśli pomysł mieści się w jednym zdaniu, jest wystarczająco dobry, żeby spróbować.</p></div>
+    <div class="m-row"><span class="m-key pixel">03</span><p>Wolimy jedną rzecz zrobioną do końca niż dziesięć porzuconych w połowie.</p></div>
+  </div>
+</section>
+
+<section id="projekty">
+  <p class="screen-title pixel">WYBIERZ GRĘ</p>
+  <p class="screen-sub">2 kartridże dostępne — wybierz i uruchom w przeglądarce.</p>
+  <div class="cabinets">
+    <a class="cab a" href="http://kebabclicker2.de5.net" target="_blank" rel="noopener">
+      <span class="slot">KARTRIDŻ 01</span>
+      <h3>Kebab clicker 2</h3>
+      <div class="bar"><i></i></div>
+      <span class="run">▶ URUCHOM GRĘ</span>
+    </a>
+    <a class="cab b" href="https://plszynon.github.io/Cat" target="_blank" rel="noopener">
+      <span class="slot">KARTRIDŻ 02</span>
+      <h3>gatto pew-pew</h3>
+      <div class="bar"><i></i></div>
+      <span class="run">▶ URUCHOM GRĘ</span>
+    </a>
+  </div>
+</section>
+
+<section id="kontakt">
+  <p class="screen-title pixel">KONTAKT</p>
+  <p class="screen-sub">Masz pomysł na kolejny kartridż? Napisz do nas.</p>
+  <div class="contact-box">
+    <p>Nie prowadzimy linii telefonicznej — wszystkie zgłoszenia i propozycje współpracy przyjmujemy mailowo.</p>
+    <a class="btn" href="mailto:collingsupport@gmail.com">collingsupport@gmail.com</a>
+  </div>
+</section>
+
+<footer>
+  <span>COLLING STUDIO</span>
+  <span>© 2026 — ALL RIGHTS RESERVED</span>
+</footer>
+
+</body>
+</html>
